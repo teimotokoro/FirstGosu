@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+
+    <script type="text/javascript" language="javascript">
+        var dataRef = new Firebase('https://mygosupoc.firebaseio.com/myGosuPOC');
+        dataRef.on('child_added', function(snapshot) {
+        alert('Changed Data ' + snapshot.val());
+        snapshot.forEach(function(childSnapshot){
+            var cname = childSnapshot.name ;
+            var cdata = childSnapshot.data;
+        alert('child name:' + cname + 'cdata:' + cdata)
+        });
+        alert('Changed Data ' + snapshot.child('People').child().name);
+
+        var message = snapshot.val();
+        $('<div/>').text(message.text).prepend($('<em/>')
+        .text(message.name+': ')).appendTo($('#messagesDiv'));
+        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+
+        var mydiv = document.getElementByID("<messagesDiv>")
+        var myHeading = document.createTextNode("Data from Firebase")
+        mydiv.appendChild(myHeading)
+
+        });
+    </script>
+    <title>My Firebase - Gosu POC Client</title>
+</head>
+<body>
+<div id='messagesDiv'></div>
+<input type='text' id='firstnameInput' placeholder='First Name'>
+<input type='text' id='lastnameInput' placeholder='Last Name'>
+<input type="number" id="ageInput" placeholder="Age">
+<script type="text/javascript" language="javascript">
+
+    // Get a reference to the root of the chat data.
+    var messagesRef = new Firebase('https://mygosupoc.firebaseio.com/myGosuPOC/People');
+
+    // When the user presses enter on the Age input, write the message to firebase.
+    $('#ageInput').keypress(function (e) {
+    if (e.keyCode == 13) {
+    var firstName = $('#firstnameInput').val();
+    var lastName = $('#lastnameInput').val();
+    var age = $('#ageInput').val();
+    messagesRef.push({First_Name:firstName, Last_Name:lastName, Age:age});
+    $('#firstnameInput').val('');
+    $('#lastnameInput').val('');
+    $('#ageInput').val('');
+    }
+    });
+
+
+</script>
+</body>
+</html>
